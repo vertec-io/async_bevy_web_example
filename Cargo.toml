@@ -15,8 +15,10 @@ wasm-bindgen = "=0.2.92"
 tracing = "0.1.40"
 
 bevy_ecs = { version = "0.13" }
+bevy = {version = "0.13", default-features = false}
 
 serde = { version = "1", features = ["derive"] }
+async-bevy-web = { git = "https://github.com/vertec-io/async_bevy_web", branch = "main"} 
 
 # Defines a size-optimized profile for the WASM bundle in release mode
 [profile.wasm-release]

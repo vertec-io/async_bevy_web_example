@@ -9,16 +9,38 @@ use regex::Regex;
 use std::io;
 use std::path::Path;
 use cinnog::loaders::ron::RonDataLayer;
+use bevy::prelude::*;
+use async_bevy_web::prelude::ABWConfigPlugin;
+use async_bevy_web::prelude::LeptosAppPlugin;
 
-#[tokio::main]
-async fn main() -> io::Result<()> {
-    DataLayer::new()
-        .insert_resource(SiteName("Bevy ECS + Leptos = 💕".to_owned()))
-        .add_markdown_directory::<PostFrontMatter>("blog")
-        .add_ron_directory::<PersonData>("people")
-        .add_plugins(ConvertMarkdownToHtml)
-        .build(App)
-        .await
+fn main(){
+    let mut binding = DataLayer::new();
+    let app = binding
+                                .insert_resource(SiteName("Bevy ECS + Leptos = 💕".to_owned()))
+                                .add_markdown_directory::<PostFrontMatter>("blog")
+                                .add_ron_directory::<PersonData>("people")
+                                .add_plugins(ConvertMarkdownToHtml)
+                                .add_plugins(ABWConfigPlugin::default())
+                                .add_plugins(LeptosAppPlugin::new(App));
+    
+    app.app.add_systems(PostStartup, print_running);
+
+    let rt = tokio::runtime::Builder::new_current_thread()
+                .enable_all()
+                .build()
+                // .unwrap();
+                .expect("Could not start a runtime to load static assets");
+
+    let _res = rt.block_on(async {
+                app.build(App).await
+            });
+
+    app.app.run();
+}
+
+
+fn print_running(){
+    println!("Running!")
 }
 
 #[derive(serde::Deserialize)]
