@@ -13,6 +13,9 @@ use cinnog::loaders::ron::RonDataLayer;
 use bevy::prelude::*;
 use async_bevy_web::prelude::ABWConfigPlugin;
 use async_bevy_web::prelude::LeptosAppPlugin;
+use tokio::task;
+use leptos_axum::generate_route_list_with_exclusions_and_ssg_and_context;
+use leptos_router::build_static_routes_with_additional_context;
 
 fn main(){
     let mut binding = DataLayer::new();
@@ -22,7 +25,7 @@ fn main(){
                                 .add_ron_directory::<PersonData>("people")
                                 .add_plugins(ConvertMarkdownToHtml);
                                 
-    
+    let app = std::mem::take(app);
     let arc_app = Arc::new(Mutex::new(app));
     let arc_app_clone = arc_app.clone();
 
@@ -34,9 +37,13 @@ fn main(){
 
     let _res = rt.block_on(async {
         let mut app_guard = arc_app_clone.lock().unwrap();
-        app_guard.build(App).await
+        // app_guard.build(App).await
+        // let app = app_guard;
+        println!("Building app...")
+        app_guard.build_external(arc_app_clone.clone(), App).await
     });
 
+    println!("Starting the application...");
     let mut app = arc_app.lock().unwrap();
     app.app.add_systems(PostStartup, print_running)
          .add_plugins(ABWConfigPlugin::default())
@@ -44,39 +51,7 @@ fn main(){
 
     app.app.run();
 
-    // let _res = rt.block_on(async {
-    //             arc_app.build(App).await
-    //         });
-            
-    // app.app.add_systems(PostStartup, print_running)
-    //         .add_plugins(ABWConfigPlugin::default())
-    //         .add_plugins(LeptosAppPlugin::new(App));
-
-    // app.app.run();
 }
-
-// #[tokio::main]
-// async fn main() -> std::io::Result<()> {
-//     let mut binding = DataLayer::new();
-//     let app = binding
-//         .insert_resource(SiteName("Bevy ECS + Leptos = 💕".to_owned()))
-//         .add_markdown_directory::<PostFrontMatter>("blog")
-//         .add_ron_directory::<PersonData>("people")
-//         .add_plugins(ConvertMarkdownToHtml)
-//         .add_plugins(ABWConfigPlugin::default())
-//         .add_plugins(LeptosAppPlugin::new(App));
-
-//     app.app.add_systems(PostStartup, print_running);
-
-//     // Build the application
-//     app.build(App).await?;
-
-//     // Now run the Bevy app
-//     app.app.run();
-
-//     Ok(())
-// }
-
 
 fn print_running(){
     println!("Running!")
@@ -120,56 +95,59 @@ impl Ingest for PostFrontMatter {
     }
 }
 
-// trait ExternalDataLayer{
-//     pub async fn build_external<IV>(
-//         &mut self, 
-//         pp_fn: impl Fn() -> IV + Clone + Send + 'static,
-//     ) -> std::io::Result<()>
-//     where
-//         IV: IntoView + 'static,
-//     {}
-// }
+trait ExternalBuild{
+    async fn build_external<IV>(
+        &mut self, 
+        data: Arc<Mutex<DataLayer>>,
+        pp_fn: impl Fn() -> IV + Clone + Send + 'static,
+    ) -> std::io::Result<()>
+    where
+        IV: IntoView + 'static;
+    
+}
 
-// impl ExternalDataLayer for DataLayer {
-//     pub async fn build_external<IV>(
-//         &mut self,
-//         app_fn: impl Fn() -> IV + Clone + Send + 'static,
-//     ) -> std::io::Result<()>
-//     where
-//         IV: IntoView + 'static,
-//     {
-//         self.app.update();
-//         let datalayer = std::mem::replace(self, DataLayer::new());
-//         let data = Arc::new(Mutex::new(datalayer));
-//         let data_for_route_generation = data.clone();
+impl ExternalBuild for DataLayer {
+    async fn build_external<IV>(
+        &mut self,
+        data: Arc<Mutex<DataLayer>>,
+        app_fn: impl Fn() -> IV + Clone + Send + 'static,
+    ) -> std::io::Result<()>
+    where
+        IV: IntoView + 'static,
+    {
+        self.app.update();
+        // let datalayer = std::mem::replace(self, DataLayer::new());
+        // let data = Arc::new(Mutex::new(datalayer));
+        let data_for_route_generation = data.clone();
 
-//         let conf = get_configuration(None).await.unwrap();
-//         let leptos_options = conf.leptos_options;
+        let conf = get_configuration(None).await.unwrap();
+        let leptos_options = conf.leptos_options;
 
-//         let (routes, static_data_map) = generate_route_list_with_exclusions_and_ssg_and_context(
-//             app_fn.clone(),
-//             None,
-//             move || provide_context(data_for_route_generation.clone()),
-//         );
+        let (routes, static_data_map) = generate_route_list_with_exclusions_and_ssg_and_context(
+            app_fn.clone(),
+            None,
+            move || provide_context(data_for_route_generation.clone()),
+        );
 
-//         let local = task::LocalSet::new();
-//         let app_fn_clone = app_fn.clone();
-//         let leptos_options_clone = leptos_options.clone();
-//         let routes_clone = routes.clone();
-//         local
-//             .run_until(async move {
-//                 build_static_routes_with_additional_context(
-//                     &leptos_options_clone,
-//                     app_fn_clone,
-//                     move || provide_context(data.clone()),
-//                     &routes_clone,
-//                     &static_data_map,
-//                 )
-//                 .await
-//                 .expect("Failed to build static routes")
-//             })
-//             .await;
-//         Ok(())
-//     }
+        let local = task::LocalSet::new();
+        let app_fn_clone = app_fn.clone();
+        let leptos_options_clone = leptos_options.clone();
+        let routes_clone = routes.clone();
+        local
+            .run_until(async move {
+                println!("Building static routes!") ;
+                build_static_routes_with_additional_context(
+                    &leptos_options_clone,
+                    app_fn_clone,
+                    move || provide_context(data.clone()),
+                    &routes_clone,
+                    &static_data_map,
+                )
+                .await
+                .expect("Failed to build static routes")
+            })
+            .await;
+        Ok(())
+    }
 
-// }
+}

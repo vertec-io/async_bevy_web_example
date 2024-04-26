@@ -15,5 +15,8 @@ serde.workspace = true
 tokio = { version = "1.33.0", features = ["full"] }
 regex = { version = "1.10.2", features = [] }
 
+leptos_router = { version = "0.6", features = ["nightly"] }
+leptos_axum = { version = "0.6"}
+
 [features]
 development = ["cinnog/development"]

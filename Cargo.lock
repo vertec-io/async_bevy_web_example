@@ -1277,6 +1277,8 @@ dependencies = [
  "bevy_ecs",
  "cinnog",
  "leptos",
+ "leptos_axum",
+ "leptos_router",
  "regex",
  "serde",
  "tokio",
