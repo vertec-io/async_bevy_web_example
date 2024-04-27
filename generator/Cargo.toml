@@ -7,7 +7,7 @@ edition = "2021"
 async-bevy-web.workspace = true
 app = { path = "../app", default-features = false}
 leptos = { workspace = true, features = [ "ssr" ]}
-cinnog = { workspace = true, features = ["generator"] }
+# cinnog = { workspace = true, features = ["generator"] }
 bevy_ecs.workspace = true
 bevy.workspace = true
 serde.workspace = true
@@ -19,4 +19,4 @@ leptos_router = { version = "0.6", features = ["nightly"] }
 leptos_axum = { version = "0.6"}
 
 [features]
-development = ["cinnog/development"]
+# development = ["cinnog/development"]

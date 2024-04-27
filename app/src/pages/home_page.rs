@@ -3,7 +3,7 @@ use leptos::*;
 use leptos_router::use_route;
 
 use crate::components::counter::Counter;
-use crate::components::navigation::Navigation;
+// use crate::components::navigation::Navigation;
 
 #[derive(Component, Clone)]
 pub struct PersonName(pub String);
@@ -20,7 +20,7 @@ pub fn HomePage() -> impl IntoView {
     let current_person = current_person.unwrap_or(&no_person);
 
     view! {
-        <Navigation/>
+        // <Navigation/>
         <h1>"Hello " {current_person} ", welcome to Leptos!"</h1>
         <Counter/>
     }

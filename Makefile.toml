@@ -33,7 +33,7 @@ workspace = false
 [tasks.watch]
 install_crate = "cargo-leptos"
 command = "cargo"
-args = ["leptos", "watch", "--hot-reload"]
+args = ["leptos", "watch", "--features", "ssr", "--hot-reload"]
 workspace = false
 
 [tasks.e2e]

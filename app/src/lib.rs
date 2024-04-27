@@ -1,20 +1,21 @@
 mod components;
 pub mod pages;
 
-use components::navigation::Navigation;
-use pages::blog::Blog;
-use pages::blog_post::BlogPost;
+// use components::navigation::Navigation;
+// use pages::blog::Blog;
+// use pages::blog_post::BlogPost;
 use pages::home_page::HomePage;
 use pages::not_found::NotFound;
 
 use bevy_ecs::prelude::Resource;
 use bevy_ecs::query::With;
 use bevy_ecs::system::Query;
-use cinnog::{run_system, FileName};
+// use cinnog::{run_system, FileName};
+use async_bevy_web::{run_system, FileName};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
-use pages::blog_post::Post;
+// use pages::blog_post::Post;
 use pages::home_page::PersonName;
 
 #[component]
@@ -31,35 +32,35 @@ pub fn App() -> impl IntoView {
         <Router>
             <main>
                 <Routes>
-                    <StaticRoute
+                    <Route
                         path="/"
                         view=HomePage
-                        static_params=move || Box::pin(async move { StaticParamsMap::default() })
+                        // route_params=move || Box::pin(async move { StaticParamsMap::default() })
                     />
 
-                    <StaticRoute
+                    <Route
                         path="/404"
                         view=NotFound
-                        static_params=move || Box::pin(async move { StaticParamsMap::default() })
+                        // static_params=move || Box::pin(async move { StaticParamsMap::default() })
                     />
 
-                    <StaticRoute
-                        path="/person/*person"
-                        view=HomePage
-                        static_params=move || Box::pin(async move { run_system(people_static_params) })
-                    />
+                    // <StaticRoute
+                    //     path="/person/*person"
+                    //     view=HomePage
+                    //     static_params=move || Box::pin(async move { run_system(people_static_params) })
+                    // />
 
-                    <StaticRoute
-                        path="/blog"
-                        view=Blog
-                        static_params=move || Box::pin(async move { StaticParamsMap::default() })
-                    />
+                    // <StaticRoute
+                    //     path="/blog"
+                    //     view=Blog
+                    //     static_params=move || Box::pin(async move { StaticParamsMap::default() })
+                    // />
 
-                    <StaticRoute
-                        path="/blog/*post"
-                        view=BlogPost
-                        static_params=move || Box::pin(async move { run_system(blog_static_params) })
-                    />
+                    // <StaticRoute
+                    //     path="/blog/*post"
+                    //     view=BlogPost
+                    //     static_params=move || Box::pin(async move { run_system(blog_static_params) })
+                    // />
 
                 </Routes>
             </main>
@@ -76,14 +77,14 @@ fn people_static_params(people: Query<&FileName, With<PersonName>>) -> StaticPar
     map
 }
 
-fn blog_static_params(posts: Query<&FileName, With<Post>>) -> StaticParamsMap {
-    let mut map = StaticParamsMap::default();
-    map.insert(
-        "post".to_string(),
-        posts.iter().map(|post| post.0.clone()).collect(),
-    );
-    map
-}
+// fn blog_static_params(posts: Query<&FileName, With<Post>>) -> StaticParamsMap {
+//     let mut map = StaticParamsMap::default();
+//     map.insert(
+//         "post".to_string(),
+//         posts.iter().map(|post| post.0.clone()).collect(),
+//     );
+//     map
+// }
 
 #[derive(Resource, Clone)]
 pub struct SiteName(pub String);
