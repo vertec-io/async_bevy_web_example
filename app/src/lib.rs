@@ -8,15 +8,15 @@ use pages::home_page::HomePage;
 use pages::not_found::NotFound;
 
 use bevy_ecs::prelude::Resource;
-use bevy_ecs::query::With;
-use bevy_ecs::system::Query;
+// use bevy_ecs::query::With;
+// use bevy_ecs::system::Query;
 // use cinnog::{run_system, FileName};
 // use async_bevy_web::{run_system, FileName};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 // use pages::blog_post::Post;
-use pages::home_page::PersonName;
+// use pages::home_page::PersonName;
 
 #[component]
 pub fn App() -> impl IntoView {

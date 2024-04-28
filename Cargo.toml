@@ -3,13 +3,10 @@ resolver = "2"
 members = ["app", "frontend", "generator"]
 
 [workspace.dependencies]
-#cinnog = { path = "../cinnog", features = ["ron", "markdown"] }
-# cinnog = { version = "0.3", features = ["ron", "markdown"] }
+async-bevy-web = { git = "https://github.com/vertec-io/async_bevy_web", branch = "main"} 
 console_error_panic_hook = "0.1"
 cfg-if = "1"
-#leptos = { path = "../leptos/leptos", features = ["nightly", "experimental-islands"] }
 leptos = { version = "0.6", features = ["nightly", "experimental-islands"] }
-#leptos_meta = { path = "../leptos/meta", features = ["nightly"] }
 leptos_meta = { version = "0.6", features = ["nightly"] }
 wasm-bindgen = "=0.2.92"
 tracing = "0.1.40"
@@ -18,7 +15,6 @@ bevy_ecs = { version = "0.13" }
 bevy = {version = "0.13", default-features = false}
 
 serde = { version = "1", features = ["derive"] }
-async-bevy-web = { git = "https://github.com/vertec-io/async_bevy_web", branch = "main"} 
 
 # Defines a size-optimized profile for the WASM bundle in release mode
 [profile.wasm-release]

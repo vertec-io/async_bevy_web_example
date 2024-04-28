@@ -8,7 +8,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 leptos = { workspace = true, features = [ "hydrate" ] }
-app = { path = "../app", features = ["hydrate"] }
+app = { path = "../app", features = ["hydrate"], default-features = false}
 
 console_error_panic_hook.workspace = true
 wasm-bindgen.workspace = true
