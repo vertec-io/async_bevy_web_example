@@ -1,10 +1,10 @@
 // use app::pages::blog_post::{BlogYear, DraftPost, Post, PostTitle, TestFontMatter};
 use app::pages::home_page::{Age, PersonName};
 use app::{App, SiteName};
-use bevy_ecs::system::EntityCommands;
+// use bevy_ecs::system::EntityCommands;
 // use cinnog::loaders::markdown::{ConvertMarkdownToHtml, MarkdownDataLayer};
 // use cinnog::{default_bundle_from_path, DataLayer, Ingest};
-use leptos::{get_configuration, provide_context, IntoView};
+// use leptos::{get_configuration, provide_context, IntoView};
 use regex::Regex;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
@@ -12,9 +12,9 @@ use std::sync::{Arc, Mutex};
 use bevy::prelude::*;
 use async_bevy_web::prelude::ABWConfigPlugin;
 use async_bevy_web::prelude::LeptosAppPlugin;
-use tokio::task;
-use leptos_axum::generate_route_list_with_exclusions_and_ssg_and_context;
-use leptos_router::build_static_routes_with_additional_context;
+// use tokio::task;s
+// use leptos_axum::generate_route_list_with_exclusions_and_ssg_and_context;
+// use leptos_router::build_static_routes_with_additional_context;
 
 fn main(){
     // let mut binding = DataLayer::new();

@@ -4,8 +4,8 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-async-bevy-web.workspace = true
-app = { path = "../app", default-features = false}
+async-bevy-web = { workspace = true, features = ["generator"]}
+app = { path = "../app", default-features = false, features = ["ssr"]}
 leptos = { workspace = true, features = [ "ssr" ]}
 # cinnog = { workspace = true, features = ["generator"] }
 bevy_ecs.workspace = true
@@ -15,8 +15,8 @@ serde.workspace = true
 tokio = { version = "1.33.0", features = ["full"] }
 regex = { version = "1.10.2", features = [] }
 
-leptos_router = { version = "0.6", features = ["nightly"] }
-leptos_axum = { version = "0.6"}
+# leptos_router = { version = "0.6", features = ["nightly"] }
+# leptos_axum = { version = "0.6"}
 
 [features]
 # development = ["cinnog/development"]

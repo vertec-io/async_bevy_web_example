@@ -11,7 +11,7 @@ use bevy_ecs::prelude::Resource;
 use bevy_ecs::query::With;
 use bevy_ecs::system::Query;
 // use cinnog::{run_system, FileName};
-use async_bevy_web::{run_system, FileName};
+// use async_bevy_web::{run_system, FileName};
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
@@ -68,14 +68,14 @@ pub fn App() -> impl IntoView {
     }
 }
 
-fn people_static_params(people: Query<&FileName, With<PersonName>>) -> StaticParamsMap {
-    let mut map = StaticParamsMap::default();
-    map.insert(
-        "person".to_string(),
-        people.iter().map(|person| person.0.clone()).collect(),
-    );
-    map
-}
+// fn people_static_params(people: Query<&FileName, With<PersonName>>) -> StaticParamsMap {
+//     let mut map = StaticParamsMap::default();
+//     map.insert(
+//         "person".to_string(),
+//         people.iter().map(|person| person.0.clone()).collect(),
+//     );
+//     map
+// }
 
 // fn blog_static_params(posts: Query<&FileName, With<Post>>) -> StaticParamsMap {
 //     let mut map = StaticParamsMap::default();
