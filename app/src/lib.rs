@@ -19,7 +19,7 @@ use leptos_router::*;
 // use pages::home_page::PersonName;
 
 #[component]
-pub fn App() -> impl IntoView {
+pub fn MyApp() -> impl IntoView {
     provide_meta_context();
 
     view! {
